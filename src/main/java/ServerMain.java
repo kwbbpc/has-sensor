@@ -6,7 +6,7 @@ public class ServerMain {
     public static void main(String args[]){
 
         System.out.println("Server is starting.....");
-        XBeeDevice myXBeeDevice = new XBeeDevice("COM4", 9600);
+        XBeeDevice myXBeeDevice = new XBeeDevice("/dev/ttyUSB0", 9600);
 
         try{
             myXBeeDevice.open();
