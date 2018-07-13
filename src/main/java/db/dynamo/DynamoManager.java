@@ -37,9 +37,11 @@ public class DynamoManager implements DataPipe{
 
         List<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
         attributeDefinitions.add(new AttributeDefinition().withAttributeName("NodeId").withAttributeType("S"));
+        attributeDefinitions.add(new AttributeDefinition().withAttributeName("Timestamp").withAttributeType("N"));
 
         List<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
         keySchema.add(new KeySchemaElement().withAttributeName("NodeId").withKeyType(KeyType.HASH));
+        keySchema.add(new KeySchemaElement().withAttributeName("Timestamp").withKeyType(KeyType.RANGE));
 
         ProvisionedThroughput pt = new ProvisionedThroughput().withReadCapacityUnits(1L).withWriteCapacityUnits(1L);
 
@@ -68,6 +70,7 @@ public class DynamoManager implements DataPipe{
     public void saveTemperature(TemperatureDao temperature) throws JsonProcessingException {
         Item temp = new Item();
         temp.withPrimaryKey("NodeId", temperature.getSensorInfo().getAddress64bit());
+        temp.withPrimaryKey("Timestamp", temperature.getTimestamp().toInstant().toEpochMilli());
 
         String tempJson = JsonUtils.MAPPER.writeValueAsString(temperature);
 
@@ -78,6 +81,7 @@ public class DynamoManager implements DataPipe{
     public void saveHumidity(HumidityDao humidityDao) throws JsonProcessingException {
         Item humidity = new Item();
         humidity.withPrimaryKey("NodeId", humidityDao.getSensorInfo().getAddress64bit());
+        humidity.withPrimaryKey("Timestamp", humidityDao.getTimestamp().toInstant().toEpochMilli());
 
         String humJson = JsonUtils.MAPPER.writeValueAsString(humidityDao);
 

@@ -28,7 +28,7 @@ public class SensorDao {
             this.hardwareVersionId = device.getHardwareVersion().getValue();
         }
         this.nodeId = device.getNodeID();
-        this.panId = device.getPANID().toString();
+        this.panId = null;
         this.xbeeProtocol = device.getXBeeProtocol().getDescription();
     }
 

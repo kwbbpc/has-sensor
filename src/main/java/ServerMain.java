@@ -20,8 +20,7 @@ public class ServerMain {
 
             WeatherMessageHandler handler =
                     new WeatherMessageHandler(
-                            new UpdateByMinuteHandicapDecorator(
-                                    new DynamoManager(creds.getAccessKey(), creds.getSecretKey())));
+                                    new DynamoManager(creds.getAccessKey(), creds.getSecretKey()));
 
             myXBeeDevice.open();
 

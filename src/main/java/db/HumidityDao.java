@@ -17,7 +17,7 @@ public class HumidityDao {
     public HumidityDao(Weather.WeatherMessage message, SensorDao sensor){
 
         this.timestamp = DateTime.now().toDate();
-        this.humidity = message.getTemperatureF();
+        this.humidity = message.getHumidity();
 
         this.sensorInfo = sensor;
     }
