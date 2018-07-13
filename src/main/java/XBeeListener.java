@@ -2,7 +2,7 @@ import com.digi.xbee.api.listeners.IDataReceiveListener;
 import com.digi.xbee.api.models.XBeeMessage;
 import com.google.protobuf.ByteString;
 import data.UpdateByMinuteHandicapDecorator;
-import db.MongoManager;
+import db.mongo.MongoManager;
 import weather.handlers.WeatherMessageHandler;
 import weather.messages.Weather;
 
@@ -10,9 +10,9 @@ public class XBeeListener implements IDataReceiveListener {
 
     private WeatherMessageHandler weatherHandler;
 
-    public XBeeListener(){
+    public XBeeListener(WeatherMessageHandler weatherHandler){
 
-        this.weatherHandler = new WeatherMessageHandler(new UpdateByMinuteHandicapDecorator(new MongoManager()));
+        this.weatherHandler = weatherHandler;
 
         System.out.println("Listening on COM4");
     }

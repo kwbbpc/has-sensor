@@ -5,10 +5,9 @@ import com.digi.xbee.api.exceptions.XBeeException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.mongodb.Mongo;
 import core.SensorHandler;
 import db.DataPipe;
-import db.MongoManager;
+import db.HumidityDao;
 import db.TemperatureDao;
 import db.sensor.SensorDao;
 import org.joda.time.DateTime;
@@ -33,9 +32,16 @@ public class WeatherMessageHandler implements SensorHandler {
 
             //format the sensor info
             SensorDao  sensor = new SensorDao(device);
-            TemperatureDao temp = new TemperatureDao(msg, sensor);
 
-            this.manager.saveTemperature(temp);
+            if(msg.hasTemperatureF()) {
+                TemperatureDao temp = new TemperatureDao(msg, sensor);
+                this.manager.saveTemperature(temp);
+            }
+
+            if(msg.hasHumidity()){
+                HumidityDao humidityDao = new HumidityDao(msg, sensor);
+                this.manager.saveHumidity(humidityDao);
+            }
 
 
         }
@@ -50,7 +56,7 @@ public class WeatherMessageHandler implements SensorHandler {
 
         }catch(JsonProcessingException e){
 
-            System.err.println("Error saving temperature data: " + e.getMessage());
+            System.err.println("Error saving data: " + e.getMessage());
             System.err.println("Temperature data: " + data);
 
         }

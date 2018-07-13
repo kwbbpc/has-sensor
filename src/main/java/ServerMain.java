@@ -1,4 +1,8 @@
 import com.digi.xbee.api.XBeeDevice;
+import data.UpdateByMinuteHandicapDecorator;
+import db.dynamo.DynamoManager;
+import db.mongo.MongoManager;
+import weather.handlers.WeatherMessageHandler;
 
 public class ServerMain {
 
@@ -8,16 +12,26 @@ public class ServerMain {
         System.out.println("Server is starting.....");
         XBeeDevice myXBeeDevice = new XBeeDevice("/dev/ttyUSB0", 9600);
 
+
+
         try{
+
+            AwsCredentialsLoader creds = new AwsCredentialsLoader("awsAccessKeys.properties");
+
+            WeatherMessageHandler handler =
+                    new WeatherMessageHandler(
+                            new UpdateByMinuteHandicapDecorator(
+                                    new DynamoManager(creds.getAccessKey(), creds.getSecretKey())));
+
             myXBeeDevice.open();
 
-            myXBeeDevice.addDataListener(new XBeeListener());
+            myXBeeDevice.addDataListener(new XBeeListener(handler));
 
             while (true) {
                 Thread.sleep(1);
             }
         }catch (Exception e){
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e);
         }
     }
 }

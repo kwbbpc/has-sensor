@@ -1,24 +1,23 @@
 package db;
 
-import com.digi.xbee.api.AbstractXBeeDevice;
 import db.sensor.SensorDao;
 import org.joda.time.DateTime;
 import weather.messages.Weather;
 
 import java.util.Date;
 
-public class TemperatureDao {
+public class HumidityDao {
 
     private final Date timestamp;
-    private final float temperature;
+    private  final float humidity;
 
     private final SensorDao sensorInfo;
 
 
-    public TemperatureDao(Weather.WeatherMessage message, SensorDao sensor){
+    public HumidityDao(Weather.WeatherMessage message, SensorDao sensor){
 
         this.timestamp = DateTime.now().toDate();
-        this.temperature = message.getTemperatureF();
+        this.humidity = message.getTemperatureF();
 
         this.sensorInfo = sensor;
     }
@@ -27,11 +26,9 @@ public class TemperatureDao {
         return timestamp;
     }
 
-
-    public float getTemperature() {
-        return temperature;
+    public float getHumidity() {
+        return humidity;
     }
-
 
     public SensorDao getSensorInfo() {
         return sensorInfo;
